@@ -19,7 +19,27 @@
       </form>
     </div>
     <div class="header-right">
+      <button class="notification" id="notifi">Notification</button>
       <a href="/logout">Logout</a>
+    </div>
+    <div class="notification-box display-none" id="notifi-box">
+      <ul class="notification-list">
+        <li class="notification-title">Notificaton</li>
+        <% mainUser.notification.forEach(user => { %>
+        <li>
+          <a href="/?id=<%= user._id %>">
+            <article class="post-notification">
+              <header class="post-header flex">
+                <img class="post-header-img" src="<%= user.avatar %>" alt="avatar">
+                <div class="post-user">
+                  <div class="post-user-name"><%= user.username %> <span class="notification-message"><%= user.message %></span></div>
+                </div>
+              </header>
+            </article>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
     </div>
   </header>
   <main class="main flex">
@@ -37,6 +57,7 @@
     </a>
     <% }) %>
   </main>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

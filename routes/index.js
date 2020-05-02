@@ -10,14 +10,16 @@ const faker = require("faker");
 const fetch = require("node-fetch");
 
 User.createMapping(function (err, mapping) {
-  console.log("mapping created");
+  if (err) throw err;
 });
 
 router.get("/", (req, res, next) => {
   if (req.user) {
+    let userDb = req.user;
+    let userId = userDb._id;
     let id = req.query.id;
     if (!id) {
-      res.redirect("/?id=" + req.user._id);
+      res.redirect("/?id=" + userId);
     } else {
       User.findById(id, (err, user) => {
         if (err) throw err;
@@ -25,7 +27,35 @@ router.get("/", (req, res, next) => {
         if (!user) {
           res.redirect("/");
         } else {
-          res.render("index", { users: user });
+          User.findById(userId, (err, mainUser) => {
+            if (err) throw err;
+
+            let users = {
+              notification: mainUser.notification,
+              username: user.username,
+              avatar: user.avatar,
+              profile_image: user.profile_image,
+              intro: user.intro,
+              _id: user._id,
+              number_friend: user.number_friend,
+              friend: user.friend,
+            };
+            if (userId == id) {
+              res.render("index", { users: userDb, role: "owner" });
+            } else {
+              if (user.get_friend.includes(userId)) {
+                res.render("index", { users, role: "sendFriend" });
+              } else if (mainUser.get_friend.includes(user._id)) {
+                res.render("index", { users, role: "getFriend" });
+              } else if (
+                mainUser.friend.filter((elem) => elem.id == user._id).length > 0
+              ) {
+                res.render("index", { users, role: "friend" });
+              } else {
+                res.render("index", { users, role: "client" });
+              }
+            }
+          });
         }
       });
     }
@@ -173,9 +203,119 @@ router.post("/search", (req, res, next) => {
         userSearch.push(user);
       }
 
-      res.render("search", { users: userSearch, search: searchString });
+      res.render("search", {
+        users: userSearch,
+        search: searchString,
+        mainUser: req.user,
+      });
     }
   );
+});
+
+router.post("/add-friend", (req, res, next) => {
+  let friendId = req.body.friendId;
+  let userDb = req.user;
+  let userId = userDb._id;
+
+  if (friendId != userId) {
+    User.findById(friendId, (err, user) => {
+      if (err) throw err;
+
+      if (!user) res.redirect("/");
+      else {
+        let friendNotification = `send you a friend request that you haven't responded yet.`;
+
+        User.findById(userId, (err, mainUser) => {
+          User.updateOne(
+            { _id: friendId },
+            {
+              $push: {
+                get_friend: userId,
+                notification: {
+                  id: userDb._id,
+                  avatar: mainUser.avatar,
+                  username: mainUser.username,
+                  message: friendNotification,
+                },
+              },
+            },
+            (err, raw) => {
+              if (err) throw err;
+
+              res.redirect("/?id=" + friendId);
+            }
+          );
+        });
+      }
+    });
+  }
+});
+
+router.post("/accept-friend", (req, res, next) => {
+  let friendId = req.body.friendId;
+  let userDb = req.user;
+  let userId = userDb._id;
+  let acceptFriendNotification = "accept your friend's request";
+
+  User.findById(friendId, (err, friend) => {
+    if (err) throw err;
+
+    if (!friend) res.redirect("/");
+    else {
+      User.findById(userId, async (err, user) => {
+        if (err) throw err;
+
+        if (user.get_friend.includes(friendId)) {
+          await User.updateOne(
+            { _id: friendId },
+            {
+              $push: {
+                friend: {
+                  id: userId,
+                  avatar: user.avatar,
+                  username: user.username,
+                },
+                notification: {
+                  id: userId,
+                  avatar: user.avatar,
+                  username: user.username,
+                  message: acceptFriendNotification,
+                },
+              },
+              $inc: {
+                number_friend: 1,
+              },
+            }
+          );
+
+          User.updateOne(
+            { _id: userId },
+            {
+              $push: {
+                friend: {
+                  id: friendId,
+                  avatar: friend.avatar,
+                  username: friend.username,
+                },
+              },
+              $pull: {
+                get_friend: friendId,
+                notification: { id: friendId },
+              },
+              $inc: {
+                number_friend: 1,
+              },
+            },
+            (err, raw) => {
+              if (err) throw err;
+
+              res.redirect("/?id=" + friendId);
+            }
+          );
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

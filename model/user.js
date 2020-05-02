@@ -56,21 +56,49 @@ const UserSchema = new Schema({
     type: String,
     default: "",
   },
-  friend: {
-    type: [String],
-    default: [],
-  },
-  send_friend: {
-    type: [String],
-    default: [],
-  },
-  notification: {
-    type: [String],
-    default: [],
-  },
+  friend: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+      avatar: {
+        type: String,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  notification: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+      avatar: {
+        type: String,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   get_friend: {
     type: [String],
     default: [],
+  },
+  number_friend: {
+    type: Number,
+    default: 0,
   },
 });
 
