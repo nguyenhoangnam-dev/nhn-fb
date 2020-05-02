@@ -6,33 +6,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/main.css">
-  <title>Username</title>
+  <title><%= users.username %></title>
 </head>
 
 <body>
   <header class="header flex flex-space-between">
     <div class="header-left flex">
       <div class="header-logo">NHNFACE</div>
-      <form action="POST">
-        <input type="search" name="search" id="search">
+      <form class="header-search flex" action="./search" method="POST">
+        <input class="header-search-box" type="search" name="search" id="search">
       </form>
     </div>
     <div class="header-right">
-      <a href="#">Login</a>
+      <a href="/logout">Logout</a>
     </div>
   </header>
   <main>
     <article class="profile-top">
       <section class="profile-image flex flex-vcenter">
         <div class="profile-image-fix flex">
-          <img class="profile-img" src="./img/profile-image.jpg" alt="profile image">
+          <img class="profile-img" src="<%= users.profile_image %>" alt="profile image">
         </div>
       </section>
       <section class="avatar flex flex-vcenter">
-        <img class="avatar-img" src="./img/avatar.jpg" alt="avatar">
+        <img class="avatar-img" src="<%= users.avatar %>" alt="avatar">
       </section>
       <section class="username">
-        Username
+        <%= users.username %>
       </section>
     </article>
     <article class="profile-content flex flex-vcenter">
@@ -42,9 +42,9 @@
             <header class="post-intro-title">Intro</header>
             <main>
               <ul class="post-intro-list">
-                <li>Studied at university of science</li>
-                <li>Studied at Le Hong Phong highschool for gifted</li>
-                <li>Lives in Ho Chi Minh ciy</li>
+                <% users.intro.forEach(info => { %>
+                <li><%= intro %> </li>
+                <% }) %>
               </ul>
             </main>
             <footer>
@@ -55,18 +55,18 @@
         <section class="post-right">
           <article class="post post-avatar">
             <header class="post-header flex">
-              <img class="post-header-img" src="./img/avatar.jpg" alt="avatar">
+              <img class="post-header-img" src="<%= users.avatar %>" alt="avatar">
               <div class="post-user">
-                <div class="post-user-name">Username</div>
+                <div class="post-user-name"><%= users.username %></div>
                 <div class="post-user-time">April, 1 2020</div>
               </div>
             </header>
             <main class="post-content">
               <div class="post-profile-image">
-                <img class="post-profile-img" src="./img/profile-image.jpg" alt="profile image">
+                <img class="post-profile-img" src="<%= users.profile_image %>" alt="profile image">
               </div>
               <div class="post-content-avatar">
-                <img class="post-avatar-img" src="./img/avatar.jpg" alt="avatar">
+                <img class="post-avatar-img" src="<%= users.avatar %>" alt="avatar">
               </div>
             </main>
             <footer>

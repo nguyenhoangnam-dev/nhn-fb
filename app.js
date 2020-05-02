@@ -12,6 +12,14 @@ const csurl = require("csurl");
 const session = require("express-session");
 require("dotenv/config");
 
+// Database
+const mongoose = require("mongoose");
+
+// Login
+const passport = require("passport");
+const flash = require("connect-flash");
+require("./config/passport")(passport);
+
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
@@ -42,12 +50,27 @@ app.use(
     name: process.env.SESSION_NAME,
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      // httpOnly: true,
-      secure: true,
-    },
+    // cookie: {
+    //   // httpOnly: true,
+    //   secure: true,
+    // },
   })
 );
+
+// Passport save session
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Flash
+app.use(flash());
+app.use(function (req, res, next) {
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  res.locals.info = req.flash("info");
+  res.locals.warm = req.flash("warm");
+  res.locals.danger = req.flash("danger");
+  next();
+});
 
 // Serve static file
 app.use(express.static(path.join(__dirname, "public")));
@@ -70,5 +93,13 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+mongoose.connect(
+  process.env.DB_CONNECTION,
+  { useCreateIndex: true, useUnifiedTopology: true, useNewUrlParser: true },
+  (err) => {
+    if (err) throw err;
+  }
+);
 
 module.exports = app;

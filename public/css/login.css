@@ -1,0 +1,167 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.flex {
+  display: flex;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button {
+  padding: 0;
+  border: none;
+  background-color: white;
+  outline: none;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+.flex-vcenter {
+  justify-content: center;
+}
+
+.flex-hcenter {
+  align-items: center;
+}
+
+.content-width {
+  width: 980px;
+}
+
+.content-left-width {
+  width: 580px;
+}
+
+.content-right-width {
+  width: 400px;
+}
+
+.header {
+  height: 80px;
+  background-color: royalblue;
+  color: white;
+}
+
+.header-logo {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.login-email,
+.login-password {
+  width: 150px;
+}
+
+.login-email input,
+.login-password input {
+  width: 150px;
+  height: 24px;
+  border: 1px solid black;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.login-password {
+  margin-left: 15px;
+}
+
+.login-submit {
+  height: 45.5px;
+  margin-left: 15px;
+  align-items: flex-end;
+}
+
+.login-button {
+  width: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  height: 24px;
+  background-color: #224185;
+  color: white;
+}
+
+.main {
+  background-color: #e9ebee;
+  height: 600px;
+}
+
+.main-title {
+  padding-top: 25px;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 48px;
+  color: #333333;
+}
+
+.main-subtitle {
+  padding-top: 12px;
+  font-size: 19px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #333333;
+}
+
+.main-register-main input {
+  height: 40px;
+  border: 1px solid #bdc7d8;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 12px;
+}
+
+.register-50 {
+  width: 190px;
+}
+
+.register-100 {
+  width: 399px;
+}
+
+.register-right {
+  margin-left: 15px;
+}
+
+.main-light-title {
+  font-size: 16px;
+  font-weight: 700;
+  list-style: 21px;
+  color: #90949c;
+}
+
+.register-button {
+  width: 195px;
+  height: 40px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 24px;
+  color: white;
+  background-color: seagreen;
+  border-radius: 5px;
+  margin-top: 25px;
+}
+
+.main-birthday select {
+  height: 30px;
+  padding-left: 5px;
+}
