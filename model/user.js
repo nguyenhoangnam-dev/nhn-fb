@@ -1,18 +1,22 @@
 const mongoose = require("mongoose");
+const mongoosastic = require("mongoosastic");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   first_name: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   last_name: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   email: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   password: {
     type: String,
@@ -46,6 +50,7 @@ const UserSchema = new Schema({
   username: {
     type: String,
     required: true,
+    es_indexed: true,
   },
   userlink: {
     type: String,
@@ -63,6 +68,12 @@ const UserSchema = new Schema({
     type: [String],
     default: [],
   },
+  get_friend: {
+    type: [String],
+    default: [],
+  },
 });
 
-module.exports = mongoose.model("users", UserSchema);
+UserSchema.plugin(mongoosastic);
+
+module.exports = mongoose.model("user", UserSchema);
