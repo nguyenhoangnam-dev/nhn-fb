@@ -9,6 +9,10 @@ require("dotenv/config");
 const faker = require("faker");
 const fetch = require("node-fetch");
 
+User.createMapping(function (err, mapping) {
+  console.log("mapping created");
+});
+
 router.get("/", (req, res, next) => {
   if (req.user) {
     let id = req.query.id;
@@ -18,7 +22,6 @@ router.get("/", (req, res, next) => {
       User.findById(id, (err, user) => {
         if (err) throw err;
 
-        console.log(user);
         if (!user) {
           res.redirect("/");
         } else {
@@ -148,6 +151,31 @@ router.post("/register", (req, res, next) => {
 router.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
+});
+
+router.post("/search", (req, res, next) => {
+  let searchString = req.body.search;
+
+  User.search(
+    {
+      query_string: {
+        query: searchString,
+      },
+    },
+    async function (err, results) {
+      if (err) throw err;
+
+      let reqUser = results.hits.hits;
+      let resLength = reqUser.length;
+      let userSearch = [];
+      for (let i = 0; i < resLength; i++) {
+        let user = await User.findById(reqUser[i]._id);
+        userSearch.push(user);
+      }
+
+      res.render("search", { users: userSearch, search: searchString });
+    }
+  );
 });
 
 module.exports = router;

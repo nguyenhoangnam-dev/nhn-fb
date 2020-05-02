@@ -8,6 +8,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  height: 100%;
 }
 
 body {
@@ -127,7 +128,7 @@ a:focus {
 }
 
 .profile-content {
-  margin-top: -120px;
+  margin-top: -80px;
   background-color: #f0f2f5;
 }
 
@@ -137,6 +138,28 @@ a:focus {
   display: grid;
   grid-template-columns: calc(40% - 10px) calc(60% - 10px);
   column-gap: 20px;
+}
+
+.add-friend {
+  width: 168px;
+  height: 36px;
+  background-color: #d8dadf;
+  font-weight: 700;
+  font-size: 16px;
+  color: black;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.profile-option {
+  justify-content: center;
+  position: relative;
+  bottom: 110px;
+}
+
+.profile-option-center {
+  width: 942px;
 }
 
 .post-left {
@@ -198,6 +221,24 @@ a:focus {
 
 .post-user {
   padding-left: 10px;
+}
+
+.post-search {
+  width: 500px;
+  border-radius: 5px;
+  border: 1px solid #a3a5a8;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: white;
+}
+
+.main {
+  justify-content: center;
+  background-color: #f0f2f5;
+  padding-top: 100px;
+  height: 100%;
+  align-items: flex-start;
 }
 
 .post-content {

@@ -12,7 +12,9 @@
 <body>
   <header class="header flex flex-space-between">
     <div class="header-left flex">
-      <div class="header-logo">NHNFACE</div>
+      <a href="/">
+        <div class="header-logo">NHNFACE</div>
+      </a>
       <form class="header-search flex" action="./search" method="POST">
         <input class="header-search-box" type="search" name="search" id="search">
       </form>
@@ -33,6 +35,11 @@
       </section>
       <section class="username">
         <%= users.username %>
+      </section>
+      <section class="profile-option flex">
+        <section class="profile-option-center">
+          <button class="add-friend">Add friend</button>
+        </section>
       </section>
     </article>
     <article class="profile-content flex flex-vcenter">

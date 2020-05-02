@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
+  <title>Username</title>
+</head>
+
+<body>
+  <header class="header flex flex-space-between">
+    <div class="header-left flex">
+      <a href="/">
+        <div class="header-logo">NHNFACE</div>
+      </a>
+      <form class="header-search flex" action="./search" method="POST">
+        <input class="header-search-box" type="search" name="search" id="search" value="<%= search %>">
+      </form>
+    </div>
+    <div class="header-right">
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+  <main class="main flex">
+    <% users.forEach(user => { %>
+    <a href="/?id=<%= user._id %>">
+      <article class="post-search">
+        <header class="post-header flex">
+          <img class="post-header-img" src="<%= user.avatar %>" alt="avatar">
+          <div class="post-user">
+            <div class="post-user-name"><%= user.username %></div>
+            <div class="post-user-time">April, 1 2020</div>
+          </div>
+        </header>
+      </article>
+    </a>
+    <% }) %>
+  </main>
+</body>
+
+</html>
