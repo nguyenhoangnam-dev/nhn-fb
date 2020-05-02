@@ -252,6 +252,36 @@ a:focus {
   color: #050505;
 }
 
+.post-friend {
+  margin-top: 12px;
+  height: 560px;
+}
+
+.post-friend-list {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: 33% 33% 33%;
+  height: 460px;
+}
+
+.post-friend-avatar img {
+  width: 100%;
+}
+
+.post-friend-avatar {
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.post-friend-username {
+  padding-top: 5px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
 .post-edit-intro {
   width: 100%;
   background-color: #d8dadf;

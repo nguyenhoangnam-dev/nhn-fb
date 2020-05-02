@@ -56,10 +56,22 @@ const UserSchema = new Schema({
     type: String,
     default: "",
   },
-  friend: {
-    type: [String],
-    default: [],
-  },
+  friend: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+      avatar: {
+        type: String,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   notification: [
     {
       id: {
@@ -83,6 +95,10 @@ const UserSchema = new Schema({
   get_friend: {
     type: [String],
     default: [],
+  },
+  number_friend: {
+    type: Number,
+    default: 0,
   },
 });
 

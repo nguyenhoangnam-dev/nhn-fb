@@ -89,8 +89,28 @@
               </ul>
             </main>
             <footer>
-              <button class="post-edit-intro">Chỉnh sửa chi tiết</button>
+              <button class="post-edit-intro">Update information</button>
             </footer>
+          </article>
+          <article class="post post-friend">
+            <header class="post-intro-title">List friends</header>
+            <p><%= users.number_friend %> friends</p>
+            <main>
+              <ul class="post-friend-list">
+                <% users.friend.forEach(friend => { %>
+                <li>
+                  <a href="/?id=<%= friend.id %>">
+                    <div class="post-friend-avatar">
+                      <img src="<%= friend.avatar %>" alt="<%= friend.username %>">
+                    </div>
+                    <div class="post-friend-username">
+                      <%= friend.username %>
+                    </div>
+                  </a>
+                </li>
+                <% }) %>
+              </ul>
+            </main>
           </article>
         </section>
         <section class="post-right">

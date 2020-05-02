@@ -37,6 +37,8 @@ router.get("/", (req, res, next) => {
               profile_image: user.profile_image,
               intro: user.intro,
               _id: user._id,
+              number_friend: user.number_friend,
+              friend: user.friend,
             };
             if (userId == id) {
               res.render("index", { users: userDb, role: "owner" });
@@ -221,25 +223,27 @@ router.post("/add-friend", (req, res, next) => {
       else {
         let friendNotification = `send you a friend request that you haven't responded yet.`;
 
-        User.updateOne(
-          { _id: friendId },
-          {
-            $push: {
-              get_friend: userId,
-              notification: {
-                id: userDb._id,
-                avatar: userDb.avatar,
-                username: userDb.username,
-                message: friendNotification,
+        User.findById(userId, (err, mainUser) => {
+          User.updateOne(
+            { _id: friendId },
+            {
+              $push: {
+                get_friend: userId,
+                notification: {
+                  id: userDb._id,
+                  avatar: mainUser.avatar,
+                  username: mainUser.username,
+                  message: friendNotification,
+                },
               },
             },
-          },
-          (err, raw) => {
-            if (err) throw err;
+            (err, raw) => {
+              if (err) throw err;
 
-            res.redirect("/?id=" + friendId);
-          }
-        );
+              res.redirect("/?id=" + friendId);
+            }
+          );
+        });
       }
     });
   }
@@ -255,17 +259,42 @@ router.post("/accept-friend", (req, res, next) => {
 
     if (!friend) res.redirect("/");
     else {
-      User.findById(userId, (err, user) => {
+      User.findById(userId, async (err, user) => {
         if (err) throw err;
 
         if (user.get_friend.includes(friendId)) {
+          await User.updateOne(
+            { _id: friendId },
+            {
+              $push: {
+                friend: {
+                  id: userId,
+                  avatar: user.avatar,
+                  username: user.username,
+                },
+              },
+              $inc: {
+                number_friend: 1,
+              },
+            }
+          );
+
           User.updateOne(
             { _id: userId },
             {
-              $push: { friend: friendId },
+              $push: {
+                friend: {
+                  id: friendId,
+                  avatar: friend.avatar,
+                  username: friend.username,
+                },
+              },
               $pull: {
                 get_friend: friendId,
                 notification: { id: friendId },
+              },
+              $inc: {
+                number_friend: 1,
               },
             },
             (err, raw) => {
