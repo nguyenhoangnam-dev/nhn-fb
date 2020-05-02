@@ -28,12 +28,12 @@
         <li class="notification-title">Notificaton</li>
         <% users.notification.forEach(user => { %>
         <li>
-          <a href="/?id=<%= user._id %>">
+          <a href="/?id=<%= user.id %>">
             <article class="post-notification">
               <header class="post-header flex">
                 <img class="post-header-img" src="<%= user.avatar %>" alt="avatar">
                 <div class="post-user">
-                  <div class="post-user-name"><%= user.username %> <%= user.message %></div>
+                  <div class="post-user-name"><%= user.username %> <span class="notification-message"><%= user.message %></span></div>
                 </div>
               </header>
             </article>
@@ -43,7 +43,7 @@
       </ul>
     </div>
   </header>
-  <main>
+  <main id="main">
     <article class="profile-top">
       <section class="profile-image flex flex-vcenter">
         <div class="profile-image-fix flex">
@@ -64,6 +64,14 @@
           </form>
           <% } else if (role == "sendFriend") { %>
           <button class="add-friend send-friend" name="friendId" disabled">Add friend</button>
+          <% } else if (role == "getFriend") { %>
+          <form action="/accept-friend" method="POST">
+            <button class="add-friend accept-friend" name="friendId" value="<%= users._id %>">Accept friend</button>
+          </form>
+          <% } else if (role == "friend") { %>
+          <form action="/unfriend" method="POST">
+            <button class="add-friend" name="friendId" value="<%= users._id %>">Unfriend</button>
+          </form>
           <% } %>
         </section>
       </section>

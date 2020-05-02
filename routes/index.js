@@ -10,7 +10,7 @@ const faker = require("faker");
 const fetch = require("node-fetch");
 
 User.createMapping(function (err, mapping) {
-  console.log("mapping created");
+  if (err) throw err;
 });
 
 router.get("/", (req, res, next) => {
@@ -27,25 +27,31 @@ router.get("/", (req, res, next) => {
         if (!user) {
           res.redirect("/");
         } else {
-          let users = {
-            notification: userDb.notification,
-            username: user.username,
-            avatar: user.avatar,
-            profile_image: user.profile_image,
-            intro: user.intro,
-            _id: user._id,
-          };
-          if (userId == id) {
-            res.render("index", { users: userDb, role: "owner" });
-          } else {
-            if (user.get_friend.includes(userId)) {
-              res.render("index", { users, role: "sendFriend" });
-            } else if (userDb.get_friend.includes(user._id)) {
-              res.render("index", { users, role: "sendFriend" });
+          User.findById(userId, (err, mainUser) => {
+            if (err) throw err;
+
+            let users = {
+              notification: mainUser.notification,
+              username: user.username,
+              avatar: user.avatar,
+              profile_image: user.profile_image,
+              intro: user.intro,
+              _id: user._id,
+            };
+            if (userId == id) {
+              res.render("index", { users: userDb, role: "owner" });
             } else {
-              res.render("index", { users, role: "client" });
+              if (user.get_friend.includes(userId)) {
+                res.render("index", { users, role: "sendFriend" });
+              } else if (mainUser.get_friend.includes(user._id)) {
+                res.render("index", { users, role: "getFriend" });
+              } else if (mainUser.friend.includes(user._id)) {
+                res.render("index", { users, role: "friend" });
+              } else {
+                res.render("index", { users, role: "client" });
+              }
             }
-          }
+          });
         }
       });
     }
@@ -193,7 +199,11 @@ router.post("/search", (req, res, next) => {
         userSearch.push(user);
       }
 
-      res.render("search", { users: userSearch, search: searchString });
+      res.render("search", {
+        users: userSearch,
+        search: searchString,
+        mainUser: req.user,
+      });
     }
   );
 });
@@ -210,13 +220,6 @@ router.post("/add-friend", (req, res, next) => {
       if (!user) res.redirect("/");
       else {
         let friendNotification = `send you a friend request that you haven't responded yet.`;
-        // User.updateOne(
-        //   { _id: userId },
-        //   { $push: { send_friend: friendId } },
-        //   (err, raw) => {
-        //     if (err) throw err;
-        //   }
-        // );
 
         User.updateOne(
           { _id: friendId },
@@ -224,6 +227,7 @@ router.post("/add-friend", (req, res, next) => {
             $push: {
               get_friend: userId,
               notification: {
+                id: userDb._id,
                 avatar: userDb.avatar,
                 username: userDb.username,
                 message: friendNotification,
@@ -239,6 +243,41 @@ router.post("/add-friend", (req, res, next) => {
       }
     });
   }
+});
+
+router.post("/accept-friend", (req, res, next) => {
+  let friendId = req.body.friendId;
+  let userDb = req.user;
+  let userId = userDb._id;
+
+  User.findById(friendId, (err, friend) => {
+    if (err) throw err;
+
+    if (!friend) res.redirect("/");
+    else {
+      User.findById(userId, (err, user) => {
+        if (err) throw err;
+
+        if (user.get_friend.includes(friendId)) {
+          User.updateOne(
+            { _id: userId },
+            {
+              $push: { friend: friendId },
+              $pull: {
+                get_friend: friendId,
+                notification: { id: friendId },
+              },
+            },
+            (err, raw) => {
+              if (err) throw err;
+
+              res.redirect("/?id=" + friendId);
+            }
+          );
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

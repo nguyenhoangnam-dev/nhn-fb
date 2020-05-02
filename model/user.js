@@ -60,12 +60,12 @@ const UserSchema = new Schema({
     type: [String],
     default: [],
   },
-  // send_friend: {
-  //   type: [String],
-  //   default: [],
-  // },
   notification: [
     {
+      id: {
+        type: String,
+        required: true,
+      },
       avatar: {
         type: String,
         required: true,
