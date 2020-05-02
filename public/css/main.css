@@ -259,8 +259,10 @@ a:focus {
 
 .post-friend-list {
   display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: 33% 33% 33%;
+  row-gap: 10px;
+  column-gap: 6px;
+  grid-template-columns: 32% 32% 32%;
+  grid-template-rows: 32% 32% 32%;
   height: 460px;
 }
 
@@ -276,7 +278,7 @@ a:focus {
 }
 
 .post-friend-username {
-  padding-top: 5px;
+  padding-top: 8px;
   font-size: 13px;
   line-height: 16px;
   font-weight: 600;

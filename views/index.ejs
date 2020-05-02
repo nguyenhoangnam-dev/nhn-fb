@@ -97,18 +97,22 @@
             <p><%= users.number_friend %> friends</p>
             <main>
               <ul class="post-friend-list">
-                <% users.friend.forEach(friend => { %>
+                <% let num = users.friend.length %>
+                <% if (num > 9) { %>
+                num = 9
+                <% } %>
+                <% for( let i = 0; i < num; i++ ) { %>
                 <li>
-                  <a href="/?id=<%= friend.id %>">
+                  <a href="/?id=<%= users.friend[i].id %>">
                     <div class="post-friend-avatar">
-                      <img src="<%= friend.avatar %>" alt="<%= friend.username %>">
+                      <img src="<%= users.friend[i].avatar %>" alt="<%= users.friend[i].username %>">
                     </div>
                     <div class="post-friend-username">
-                      <%= friend.username %>
+                      <%= users.friend[i].username %>
                     </div>
                   </a>
                 </li>
-                <% }) %>
+                <% } %>
               </ul>
             </main>
           </article>

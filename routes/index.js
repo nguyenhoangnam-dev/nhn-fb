@@ -47,7 +47,9 @@ router.get("/", (req, res, next) => {
                 res.render("index", { users, role: "sendFriend" });
               } else if (mainUser.get_friend.includes(user._id)) {
                 res.render("index", { users, role: "getFriend" });
-              } else if (mainUser.friend.includes(user._id)) {
+              } else if (
+                mainUser.friend.filter((elem) => elem.id == user._id).length > 0
+              ) {
                 res.render("index", { users, role: "friend" });
               } else {
                 res.render("index", { users, role: "client" });
@@ -253,6 +255,7 @@ router.post("/accept-friend", (req, res, next) => {
   let friendId = req.body.friendId;
   let userDb = req.user;
   let userId = userDb._id;
+  let acceptFriendNotification = "accept your friend's request";
 
   User.findById(friendId, (err, friend) => {
     if (err) throw err;
@@ -271,6 +274,12 @@ router.post("/accept-friend", (req, res, next) => {
                   id: userId,
                   avatar: user.avatar,
                   username: user.username,
+                },
+                notification: {
+                  id: userId,
+                  avatar: user.avatar,
+                  username: user.username,
+                  message: acceptFriendNotification,
                 },
               },
               $inc: {
