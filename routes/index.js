@@ -15,9 +15,11 @@ User.createMapping(function (err, mapping) {
 
 router.get("/", (req, res, next) => {
   if (req.user) {
+    let userDb = req.user;
+    let userId = userDb._id;
     let id = req.query.id;
     if (!id) {
-      res.redirect("/?id=" + req.user._id);
+      res.redirect("/?id=" + userId);
     } else {
       User.findById(id, (err, user) => {
         if (err) throw err;
@@ -25,7 +27,25 @@ router.get("/", (req, res, next) => {
         if (!user) {
           res.redirect("/");
         } else {
-          res.render("index", { users: user });
+          let users = {
+            notification: userDb.notification,
+            username: user.username,
+            avatar: user.avatar,
+            profile_image: user.profile_image,
+            intro: user.intro,
+            _id: user._id,
+          };
+          if (userId == id) {
+            res.render("index", { users: userDb, role: "owner" });
+          } else {
+            if (user.get_friend.includes(userId)) {
+              res.render("index", { users, role: "sendFriend" });
+            } else if (userDb.get_friend.includes(user._id)) {
+              res.render("index", { users, role: "sendFriend" });
+            } else {
+              res.render("index", { users, role: "client" });
+            }
+          }
         }
       });
     }
@@ -176,6 +196,49 @@ router.post("/search", (req, res, next) => {
       res.render("search", { users: userSearch, search: searchString });
     }
   );
+});
+
+router.post("/add-friend", (req, res, next) => {
+  let friendId = req.body.friendId;
+  let userDb = req.user;
+  let userId = userDb._id;
+
+  if (friendId != userId) {
+    User.findById(friendId, (err, user) => {
+      if (err) throw err;
+
+      if (!user) res.redirect("/");
+      else {
+        let friendNotification = `send you a friend request that you haven't responded yet.`;
+        // User.updateOne(
+        //   { _id: userId },
+        //   { $push: { send_friend: friendId } },
+        //   (err, raw) => {
+        //     if (err) throw err;
+        //   }
+        // );
+
+        User.updateOne(
+          { _id: friendId },
+          {
+            $push: {
+              get_friend: userId,
+              notification: {
+                avatar: userDb.avatar,
+                username: userDb.username,
+                message: friendNotification,
+              },
+            },
+          },
+          (err, raw) => {
+            if (err) throw err;
+
+            res.redirect("/?id=" + friendId);
+          }
+        );
+      }
+    });
+  }
 });
 
 module.exports = router;

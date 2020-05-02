@@ -20,7 +20,27 @@
       </form>
     </div>
     <div class="header-right">
+      <button class="notification" id="notifi">Notification</button>
       <a href="/logout">Logout</a>
+    </div>
+    <div class="notification-box display-none" id="notifi-box">
+      <ul class="notification-list">
+        <li class="notification-title">Notificaton</li>
+        <% users.notification.forEach(user => { %>
+        <li>
+          <a href="/?id=<%= user._id %>">
+            <article class="post-notification">
+              <header class="post-header flex">
+                <img class="post-header-img" src="<%= user.avatar %>" alt="avatar">
+                <div class="post-user">
+                  <div class="post-user-name"><%= user.username %> <%= user.message %></div>
+                </div>
+              </header>
+            </article>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
     </div>
   </header>
   <main>
@@ -38,7 +58,13 @@
       </section>
       <section class="profile-option flex">
         <section class="profile-option-center">
-          <button class="add-friend">Add friend</button>
+          <% if (role == "client") { %>
+          <form action="/add-friend" method="POST">
+            <button class="add-friend" name="friendId" value="<%= users._id %>">Add friend</button>
+          </form>
+          <% } else if (role == "sendFriend") { %>
+          <button class="add-friend send-friend" name="friendId" disabled">Add friend</button>
+          <% } %>
         </section>
       </section>
     </article>
@@ -87,6 +113,7 @@
       </div>
     </article>
   </main>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

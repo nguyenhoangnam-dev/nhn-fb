@@ -60,14 +60,26 @@ const UserSchema = new Schema({
     type: [String],
     default: [],
   },
-  send_friend: {
-    type: [String],
-    default: [],
-  },
-  notification: {
-    type: [String],
-    default: [],
-  },
+  // send_friend: {
+  //   type: [String],
+  //   default: [],
+  // },
+  notification: [
+    {
+      avatar: {
+        type: String,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   get_friend: {
     type: [String],
     default: [],
