@@ -12,16 +12,38 @@
 <body>
   <header class="header flex flex-space-between">
     <div class="header-left flex">
-      <div class="header-logo">NHNFACE</div>
+      <a href="/">
+        <div class="header-logo">NHNFACE</div>
+      </a>
       <form class="header-search flex" action="./search" method="POST">
         <input class="header-search-box" type="search" name="search" id="search">
       </form>
     </div>
     <div class="header-right">
+      <button class="notification" id="notifi">Notification</button>
       <a href="/logout">Logout</a>
     </div>
+    <div class="notification-box display-none" id="notifi-box">
+      <ul class="notification-list">
+        <li class="notification-title">Notificaton</li>
+        <% users.notification.forEach(user => { %>
+        <li>
+          <a href="/?id=<%= user.id %>">
+            <article class="post-notification">
+              <header class="post-header flex">
+                <img class="post-header-img" src="<%= user.avatar %>" alt="avatar">
+                <div class="post-user">
+                  <div class="post-user-name"><%= user.username %> <span class="notification-message"><%= user.message %></span></div>
+                </div>
+              </header>
+            </article>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
   </header>
-  <main>
+  <main id="main">
     <article class="profile-top">
       <section class="profile-image flex flex-vcenter">
         <div class="profile-image-fix flex">
@@ -33,6 +55,25 @@
       </section>
       <section class="username">
         <%= users.username %>
+      </section>
+      <section class="profile-option flex">
+        <section class="profile-option-center">
+          <% if (role == "client") { %>
+          <form action="/add-friend" method="POST">
+            <button class="add-friend" name="friendId" value="<%= users._id %>">Add friend</button>
+          </form>
+          <% } else if (role == "sendFriend") { %>
+          <button class="add-friend send-friend" name="friendId" disabled">Add friend</button>
+          <% } else if (role == "getFriend") { %>
+          <form action="/accept-friend" method="POST">
+            <button class="add-friend accept-friend" name="friendId" value="<%= users._id %>">Accept friend</button>
+          </form>
+          <% } else if (role == "friend") { %>
+          <form action="/unfriend" method="POST">
+            <button class="add-friend" name="friendId" value="<%= users._id %>">Unfriend</button>
+          </form>
+          <% } %>
+        </section>
       </section>
     </article>
     <article class="profile-content flex flex-vcenter">
@@ -48,8 +89,32 @@
               </ul>
             </main>
             <footer>
-              <button class="post-edit-intro">Chỉnh sửa chi tiết</button>
+              <button class="post-edit-intro">Update information</button>
             </footer>
+          </article>
+          <article class="post post-friend">
+            <header class="post-intro-title">List friends</header>
+            <p><%= users.number_friend %> friends</p>
+            <main>
+              <ul class="post-friend-list">
+                <% let num = users.friend.length %>
+                <% if (num > 9) { %>
+                num = 9
+                <% } %>
+                <% for( let i = 0; i < num; i++ ) { %>
+                <li>
+                  <a href="/?id=<%= users.friend[i].id %>">
+                    <div class="post-friend-avatar">
+                      <img src="<%= users.friend[i].avatar %>" alt="<%= users.friend[i].username %>">
+                    </div>
+                    <div class="post-friend-username">
+                      <%= users.friend[i].username %>
+                    </div>
+                  </a>
+                </li>
+                <% } %>
+              </ul>
+            </main>
           </article>
         </section>
         <section class="post-right">
@@ -80,6 +145,7 @@
       </div>
     </article>
   </main>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

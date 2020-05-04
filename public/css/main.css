@@ -8,9 +8,11 @@ html,
 body {
   padding: 0;
   margin: 0;
+  height: 100%;
 }
 
-body {
+body,
+button {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -20,6 +22,7 @@ body {
 
 ul {
   padding: 0;
+  margin: 0;
 }
 
 li {
@@ -37,6 +40,10 @@ a {
 
 a:focus {
   color: black;
+}
+
+.display-none {
+  display: none;
 }
 
 .flex-space-between {
@@ -127,7 +134,7 @@ a:focus {
 }
 
 .profile-content {
-  margin-top: -120px;
+  margin-top: -80px;
   background-color: #f0f2f5;
 }
 
@@ -137,6 +144,79 @@ a:focus {
   display: grid;
   grid-template-columns: calc(40% - 10px) calc(60% - 10px);
   column-gap: 20px;
+}
+
+.add-friend {
+  width: 168px;
+  height: 36px;
+  background-color: #d8dadf;
+  font-weight: 700;
+  font-size: 16px;
+  color: black;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.send-friend {
+  background-color: #f5f5f5 !important;
+  cursor: default !important;
+  color: rgb(141, 141, 141) !important;
+}
+
+.accept-friend {
+  background-color: cornflowerblue !important;
+  color: white !important;
+}
+
+.notification {
+  background-color: white;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.notification-message {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.notification-box {
+  width: 360px;
+  background-color: white;
+  position: absolute;
+  top: 48px;
+  right: 20px;
+  height: 90vh;
+  overflow: hidden;
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.notification-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #050505;
+  padding-bottom: 25px;
+}
+
+.profile-option {
+  justify-content: center;
+  position: relative;
+  bottom: 110px;
+}
+
+.profile-option-center {
+  width: 942px;
 }
 
 .post-left {
@@ -172,6 +252,38 @@ a:focus {
   color: #050505;
 }
 
+.post-friend {
+  margin-top: 12px;
+  height: 560px;
+}
+
+.post-friend-list {
+  display: grid;
+  row-gap: 10px;
+  column-gap: 6px;
+  grid-template-columns: 32% 32% 32%;
+  grid-template-rows: 32% 32% 32%;
+  height: 460px;
+}
+
+.post-friend-avatar img {
+  width: 100%;
+}
+
+.post-friend-avatar {
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.post-friend-username {
+  padding-top: 8px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
 .post-edit-intro {
   width: 100%;
   background-color: #d8dadf;
@@ -198,6 +310,30 @@ a:focus {
 
 .post-user {
   padding-left: 10px;
+}
+
+.post-search {
+  width: 500px;
+  border-radius: 5px;
+  border: 1px solid #a3a5a8;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: white;
+}
+
+.post-notification {
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.main {
+  justify-content: center;
+  background-color: #f0f2f5;
+  padding-top: 100px;
+  height: 100%;
+  align-items: flex-start;
 }
 
 .post-content {
